@@ -1,5 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 import MainView from "../views/MainView.vue";
+import graphView from "@/views/GraphView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,6 +10,10 @@ const router = createRouter({
       name: 'main',
       component: MainView
     },
+    {
+      path: '/graph',
+      component: graphView
+    }
   ]
 })
 
