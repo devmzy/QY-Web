@@ -4,12 +4,12 @@
     <div class="search-area-box">
       <div class="search-box">
       <span class="icon-fire">
-      <svg class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"
-           width="16" height="16">
-        <path
-            d="M775.093 258.353c-116.478 35.083-137.803 134.53-130.29 197.693-83.093-103.15-79.681-221.81-79.681-392.763-266.493 106.12-204.517 412.087-212.487 505-67.03-57.94-79.696-196.38-79.696-196.38-70.76 38.453-106.242 141.147-106.242 224.447 0 201.437 154.599 364.724 345.303 364.724S857.303 797.787 857.303 596.35c0-119.71-83.218-174.931-82.21-337.997z"
-            fill="#66ccff"></path>
-      </svg>
+<svg t="1667350078127" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5672"
+     width="16" height="16"><path
+    d="M486.2 102.6s11-11.2 27.5 3c25.3 21.8 211.6 197.8 289.2 331.1 57.9 99.4 61.9 218.5 22.6 302.4-42.5 90.7-91 129-135.7 150.2-49.4 23.4-83.4 37.3-212.4 38.9-13.6 0.2-17.7-797.5-17.7-797.5l26.5-28.1z"
+    fill="#2280BF" p-id="5673"></path><path
+    d="M486.2 928.3c-174.8 0-316.5-142.8-316.5-319 0-117.5 105.5-286.4 316.5-506.7 211 220.3 316.5 389.2 316.5 506.7 0.1 176.1-141.7 319-316.5 319zM254.3 653.4c21.2 89 85.8 161.3 171.8 192.5 7 2.5 14.7 2.1 21.4-1.1 6.7-3.2 11.8-8.9 14.3-16 5.2-14.6-2.4-30.7-16.9-36-68.2-24.7-119.4-82.1-136.2-152.6-2.4-9.7-9.7-17.4-19.3-20.2-9.6-2.8-19.9-0.3-27.2 6.6-7.3 6.9-10.3 17.1-7.9 26.8z m0 0"
+    fill="#4EB3FF" p-id="5674"></path></svg>
       </span>
         <input class="input-box" v-model="searchKey"/>
         <button class="search-button-box" @click="search()">
@@ -26,8 +26,9 @@
       </div>
     </div>
 
-    <div id="mountNode" class="graph-box"></div>
-
+    <div class="graph-area">
+      <div id="mountNode" class="graph-box"></div>
+    </div>
   </div>
 </template>
 
@@ -46,9 +47,7 @@ export default {
     },
     async search() {
       let result = await this.$http.get("/query/" + this.searchKey)
-      console.log(result.data.data)
-      // let nodeList = result.data.nodeList
-      // let edgeList = result.data.edgeList
+      // console.log(result.data.data)
       let nodeList = []
       let edgeList = []
       let dataList = result.data.data
@@ -57,29 +56,63 @@ export default {
         nodeList.push(...data.Nodes)
         edgeList.push(...data.Relationships)
       }
-      console.log("nodeList");
-      console.log(nodeList);
-      console.log("edgeList");
-      console.log(edgeList);
+      let g6NodeList = []
+      let nodeIdList = []
+
+      const colors = [
+        '#BDD2FD',
+        '#BDEFDB',
+        '#C2C8D5',
+        '#FBE5A2',
+        '#F6C3B7',
+        '#B6E3F5',
+        '#D3C6EA',
+        '#FFD8B8',
+        '#AAD8D8',
+        '#FFD6E7',
+      ];
+      const strokes = [
+        '#5B8FF9',
+        '#5AD8A6',
+        '#5D7092',
+        '#F6BD16',
+        '#E8684A',
+        '#6DC8EC',
+        '#9270CA',
+        '#FF9D4D',
+        '#269A99',
+        '#FF99C3',
+      ];
+
       for (let node of nodeList) {
-        // console.log(node['Props']);
-        node['label'] = node['Props']["name"]
-        node['id'] = node['ElementId']
-        // console.log(node)
+        let newNode = {}
+        newNode['cluster'] = node['Labels'][0]
+        newNode['label'] = node['Props']["name"]
+        newNode['id'] = node['ElementId']
+        if (nodeIdList.indexOf(newNode['id']) == -1) {
+          g6NodeList.push(newNode)
+          nodeIdList.push(newNode['id'])
+        }
+        console.log(node)
       }
+      let g6EdgeList = []
       for (let edge of edgeList) {
-        // console.log(edge);
-        edge['id'] = edge['Id']
-        edge['source'] = edge['StartElementId']
-        edge['target'] = edge['EndElementId']
-        edge['label'] = edge['Type']
-        // edge['type'] = 'cubic'
-        // console.log(node)
+        let newEdge = {}
+        newEdge['source'] = edge['StartElementId']
+        newEdge['target'] = edge['EndElementId']
+        newEdge['label'] = edge['Type']
+        g6EdgeList.push(newEdge)
       }
+      console.log("nodeList");
+      console.log(g6NodeList);
+      console.log("edgeList");
+      console.log(g6EdgeList);
+
+
 
       const data1 = {
-        nodes: nodeList,
-        edges: edgeList
+        nodes: g6NodeList,
+        edges: g6EdgeList
       }
       const data = {
         // 点集
@@ -833,28 +866,95 @@ export default {
         nodeList.push(...data.Nodes)
         edgeList.push(...data.Relationships)
       }
-      console.log("nodeList");
-      console.log(nodeList);
-      console.log("edgeList");
-      console.log(edgeList);
+
+      let g6NodeList = []
       for (let node of nodeList) {
+        let newNode = {}
         // console.log(node['Props']);
-        node['label'] = node['Props']["name"]
-        node['id'] = node['ElementId']
+        newNode['cluster'] = node['Labels'][0]
+        newNode['label'] = node['Props']["name"]
+        newNode['id'] = node['ElementId']
+        g6NodeList.push(newNode)
         // console.log(node)
       }
+      let g6EdgeList = []
       for (let edge of edgeList) {
+        let newEdge = {}
         // console.log(edge);
-        edge['id'] = edge['Id']
-        edge['source'] = edge['StartElementId']
-        edge['target'] = edge['EndElementId']
-        edge['label'] = edge['Type']
+        // newEdge['id'] = edge['Id']
+        newEdge['source'] = edge['StartElementId']
+        newEdge['target'] = edge['EndElementId']
+        newEdge['label'] = edge['Type']
+        g6EdgeList.push(newEdge)
+      }
+      console.log("nodeList");
+      console.log(g6NodeList);
+      console.log("edgeList");
+      console.log(g6EdgeList);
 
+      const legendData = {
+        nodes: [
+          { id: '河流', label: 'a', },
+          { id: '区县', label: 'b', },
+          { id: 'c', label: 'c', },
+          { id: 'd', label: 'd', }
+        ], edges: [
+          { id: 'a', label: 'a', },
+          { id: 'b', label: 'b', },
+          { id: 'c', label: 'c', },
+          { id: 'd', label: 'd', }
+        ]
       }
 
+      const legend = new G6.Legend({
+        data: legendData,
+        align: 'center',
+        layout: 'horizontal', // vertical
+        position: 'bottom-left',
+        vertiSep: 12,
+        horiSep: 24,
+        offsetY: -24,
+        padding: [4, 16, 8, 16],
+        containerStyle: {
+          fill: '#ccc',
+          lineWidth: 1
+        },
+        title: '图例',
+        titleConfig: {
+          position: 'left',
+          offsetX: 0,
+          offsetY: 12,
+        },
+        filter: {
+          enable: true,
+          multiple: true,
+          trigger: 'click',
+          graphActiveState: 'activeByLegend',
+          graphInactiveState: 'inactiveByLegend',
+          filterFunctions: {
+            'a': (d) => {
+              if (d.cluster === 'a') return true;
+              return false
+            },
+            'b': (d) => {
+              if (d.cluster === 'b') return true;
+              return false
+            },
+            'c': (d) => {
+              if (d.cluster === 'c') return true;
+              return false
+            },
+            'd': (d) => {
+              if (d.cluster === 'd') return true;
+              return false
+            },
+          }
+        }
+      });
+
       const data1 = {
-        nodes: nodeList,
-        edges: edgeList
+        nodes: g6NodeList,
+        edges: g6EdgeList
       }
       const data = {
         // 点集
@@ -1590,6 +1690,9 @@ export default {
           }
         ],
       };
+      const minimap = new G6.Minimap({
+        size: [150, 100],
+      });
       const graph = new G6.Graph({
         container: 'mountNode', // String | HTMLElement，必须，在 Step 1 中创建的容器 id 或容器本身
         width: 1500, // Number，必须，图的宽度
@@ -1604,6 +1707,7 @@ export default {
         modes: {
           default: ['drag-canvas', 'zoom-canvas', 'drag-node'], // 允许拖拽画布、放缩画布、拖拽节点
         },
+        plugins: [minimap],
         animate: true, // Boolean，可选，全局变化时否使用动画过渡
         defaultNode: {
           size: 50,
@@ -1651,28 +1755,27 @@ export default {
 </script>
 
 <style scoped>
-.search-box {
-  width: 50%;
-}
 
 .graph-box {
   width: 1500px;
   height: 700px;
-  border: 1px solid #0D1341;
+  border: 1px solid rgba(16, 26, 61, 0.37);
 }
 
 .title-box {
   font-size: 48px;
   text-align: center;
+  padding: 40px;
 }
 
 .main-box {
-
+  padding: 4px 0 0 0;
 }
 
 .search-box {
   display: flex;
   width: 600px;
+  margin-bottom: 40px;
 }
 
 .input-box {
@@ -1734,6 +1837,12 @@ input:focus {
   justify-content: center;
   align-items: center;
   margin: 10px;
+}
+
+.graph-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 </style>

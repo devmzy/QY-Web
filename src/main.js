@@ -13,7 +13,8 @@ import axios from 'axios'
 
 const app = createApp(App)
 
-axios.defaults.baseURL =  'http://localhost:9000'
+axios.defaults.baseURL = 'http://localhost:89'
+// axios.defaults.baseURL =  'http://113.54.15.60:89'
 
 app.use(ElementPlus)
 app.use(createPinia())

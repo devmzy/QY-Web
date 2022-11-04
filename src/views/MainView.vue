@@ -3,7 +3,7 @@
     <div class="top-box">
       <div class="title-box">数字孪生青衣江</div>
       <div class="station-box">
-        预设场景:
+        水电站:
         <el-dropdown split-button type="primary">
           {{ currentStation }}
           <template #dropdown>
@@ -2475,6 +2475,7 @@ export default {
 
 .main-box {
   overflow: hidden;
+  user-select: none;
 }
 
 .center-box {
