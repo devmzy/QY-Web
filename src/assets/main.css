@@ -8,6 +8,10 @@
     font-weight: normal;
 }
 
+html {
+    height: 100%
+}
+
 a,
 .green {
     text-decoration: none;
@@ -24,11 +28,14 @@ a,
 @media (min-width: 1024px) {
     body {
         display: flex;
-        background: rgba(136, 68, 68, 0)
+        background: rgba(136, 68, 68, 0);
+
+        height: 100%
     }
 
     #app {
-        width: 100vw;
+        width: 100%;
+        height: 100%;
         /*display: flex;*/
         grid-template-columns: 1fr 1fr;
         /*padding: 0 2rem;*/

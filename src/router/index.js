@@ -1,7 +1,9 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import MainView from "../views/MainView.vue";
 import graphView from "@/views/GraphView.vue";
-import Abc from "@/views/Abc.vue";
+import Main2 from "@/views/Main2.vue";
+import Tree from "@/views/Tree.vue";
+import Pie from "@/views/Pie.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,8 +18,16 @@ const router = createRouter({
       component: graphView
     },
     {
-      path: '/abc',
-      component: Abc
+      path: '/Main2',
+      component: Main2
+    },
+    {
+      path: '/tree',
+      component: Tree
+    },
+    {
+      path: "/pie",
+      component: Pie
     }
   ]
 })

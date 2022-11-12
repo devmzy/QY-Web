@@ -187,7 +187,7 @@ export default {
       door3: false,
       door4: false,
       door5: false,
-
+      stationArr: [],
       stationName: '',
       chartSwitch: true,
       switchState: false,
@@ -2364,7 +2364,7 @@ export default {
 
 }
 </script>
-<style scoped>
+<style scoped lang="less">
 
 .example-showcase .el-dropdown-link {
   cursor: pointer;
@@ -2521,6 +2521,128 @@ export default {
 .info-item div:last-child {
   font-weight: bold;
   flex: 2;
+}
+
+.main {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 5px 0 0;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    z-index: 2;
+    height: calc(100% - 20px);
+    background-color: rgba(0, 21, 41, 0.4);
+    border-radius: 5px;
+
+    .list-total {
+      width: 100%;
+      height: 40px;
+      display: flex;
+      align-items: flex-start;
+      padding-left: 10px;
+
+      .river-num {
+        color: rgb(242, 196, 31);
+        font-size: 22px;
+        font-style: italic;
+        font-weight: bolder;
+      }
+
+      .river-words {
+        color: white;
+        font-size: 20px;
+        margin: 2px 0 0 10px;
+      }
+    }
+
+    .list-area {
+      width: 100%;
+      height: calc(100% - 80px);
+      overflow: auto;
+
+      .list-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: white;
+        height: 40px;
+        cursor: pointer;
+        margin-right: 5px;
+
+        &:hover {
+          background-color: rgb(34, 63, 105);
+          border-left: 4px solid rgb(67, 122, 218);
+        }
+
+        .row-left {
+          display: flex;
+
+          .row-icon {
+            display: flex;
+            align-items: center;
+            margin: 0 10px 0 15px;
+          }
+
+          .row-level {
+            margin: 0 10px;
+            background-color: rgb(46, 134, 255);
+            border-radius: 5px;
+            padding: 2px 8px;
+            font-size: 12px;
+          }
+        }
+
+        .row-right {
+          .row-childNum {
+            margin-right: 10px;
+            color: rgb(96, 131, 204);
+          }
+        }
+      }
+
+      .list-row-selected {
+        background-color: rgba(34, 63, 105, 0.5);
+        border-left: 4px solid rgb(67, 122, 218);
+      }
+    }
+
+    /*滚动条样式*/
+
+    .list-area::-webkit-scrollbar {
+      /*滚动条整体样式*/
+      width: 4px !important;
+      /*高宽分别对应横竖滚动条的尺寸*/
+      height: 4px !important;
+    }
+
+    .list-area::-webkit-scrollbar-thumb {
+      /*滚动条里面小方块*/
+      border-radius: 5px !important;
+      background: rgb(74, 80, 116) !important;
+    }
+
+    .list-area::-webkit-scrollbar-track {
+      /*滚动条里面轨道*/
+      border-radius: 0 !important;
+      background: rgb(42, 46, 72) !important;
+    }
+
+
+    .list-pagination {
+      width: 100%;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+  }
+
 }
 
 </style>
